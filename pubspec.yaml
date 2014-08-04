@@ -1,5 +1,7 @@
 name: LevelUp
-description: A pub package 
+version: 0.0.1
+author: Benoit Letondor
+description: 2D game framework
 dependencies:
   browser: any
   Pixi2dart:
