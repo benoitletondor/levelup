@@ -1,0 +1,7 @@
+name: LevelUp
+description: A pub package 
+dependencies:
+  browser: any
+  Pixi2dart:
+    path: ../Pixi2dart/
+  box2d: "0.1.7"
