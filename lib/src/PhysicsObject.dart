@@ -14,7 +14,7 @@ abstract class PhysicsObject
     
     set rotation(num rotation);
     
-    FixtureDef get fixtureDef;
+    FixtureDef buildFixtureDef();
     
     Size get size;
 }

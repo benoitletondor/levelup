@@ -1,6 +1,6 @@
 part of levelup;
 
-typedef dynamic RenderingAction(num);
+typedef void RenderingAction(num);
 
 class RenderingManager
 {
@@ -37,9 +37,9 @@ class RenderingManager
             window.animationFrame.then(_loop);
         }
         
-        for(RenderingAction action in _actions)
+        _actions.forEach((action)
         {
             action(dt);
-        }
+        });
     }
 }
