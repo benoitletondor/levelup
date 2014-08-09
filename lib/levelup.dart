@@ -8,7 +8,6 @@ import 'package:box2d/box2d.dart';
 part 'src/RenderingManager.dart';
 part 'src/GameStage.dart';
 part 'src/PhysicsObject.dart';
-part 'src/Size.dart';
 part 'src/StageContactListener.dart';
 part 'src/helper/MathHelper.dart';
 
