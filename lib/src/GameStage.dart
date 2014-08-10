@@ -35,24 +35,24 @@ class GameStage
     
 // ------------------------------------------->
     
-    static void addChild(Sprite sprite)
+    static void addChild(DisplayObject displayObject)
     {
-        assert(sprite != null);
+        assert(displayObject != null);
         
-        if( sprite is PhysicsObject )
+        if( displayObject is PhysicsObject )
         {
-            PhysicsObject object = sprite as PhysicsObject;
+            PhysicsObject object = displayObject as PhysicsObject;
             object.body = _createBody(object);
             _physicsObjects.add(object);
         }
         
-        _stage.addChild(sprite);
+        _stage.addChild(displayObject);
     }
     
     static Body _createBody(PhysicsObject object)
     {
         BodyDef def = new BodyDef()
-            ..type = BodyType.DYNAMIC
+            ..type = object.bodyType
             ..position.setValues(object.position.x.toDouble(), object.position.y.toDouble())
             ..angle = MathHelper.degreeToRadian(object.rotation);
         
@@ -60,13 +60,13 @@ class GameStage
             ..createFixture(object.buildFixtureDef()..userData = object); //FIXME circular reference are probably bad
     }
     
-    static void removeChild(Sprite sprite)
+    static void removeChild(DisplayObject displayObject)
     {
-        assert(sprite != null);
+        assert(displayObject != null);
         
-        if( sprite is PhysicsObject )
+        if( displayObject is PhysicsObject )
         {
-            PhysicsObject object = sprite as PhysicsObject;
+            PhysicsObject object = displayObject as PhysicsObject;
             
             object.body.fixtureList.userData = null;
             object.body.userData = null;
@@ -76,7 +76,7 @@ class GameStage
             _physicsObjects.remove(object);
         }
         
-        _stage.removeChild(sprite);
+        _stage.removeChild(displayObject);
     }
     
 // ------------------------------------------->
@@ -105,18 +105,18 @@ class _Listener implements ContactListener
     
     void beginContact(Contact contact)
     {
-        Sprite spriteA = contact.fixtureA.userData as Sprite;
-        Sprite spriteB = contact.fixtureB.userData as Sprite;
+        DisplayObject displayObjectA = contact.fixtureA.userData as DisplayObject;
+        DisplayObject displayObjectB = contact.fixtureB.userData as DisplayObject;
         
-        _contactListener.onContactBegin(spriteA, spriteB, contact);
+        _contactListener.onContactBegin(displayObjectA, displayObjectB, contact);
     }
 
     void endContact(Contact contact)
     {
-        Sprite spriteA = contact.fixtureA.userData as Sprite;
-        Sprite spriteB = contact.fixtureB.userData as Sprite;
+        DisplayObject displayObjectA = contact.fixtureA.userData as DisplayObject;
+        DisplayObject displayObjectB = contact.fixtureB.userData as DisplayObject;
         
-        _contactListener.onContactEnd(spriteA, spriteB, contact);
+        _contactListener.onContactEnd(displayObjectA, displayObjectB, contact);
     }
  
     void preSolve(Contact contact, Manifold oldManifold)

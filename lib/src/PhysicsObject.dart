@@ -15,4 +15,6 @@ abstract class PhysicsObject
     set rotation(num rotation);
     
     FixtureDef buildFixtureDef();
+    
+    int get bodyType;
 }
