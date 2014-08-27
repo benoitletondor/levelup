@@ -31,6 +31,8 @@ class GameStage implements ContactListener
     
     CanvasElement get view => _renderer.view;
     
+    World get world => _world;
+    
 // ------------------------------------------->
     
     void addChild(DisplayObject displayObject)
