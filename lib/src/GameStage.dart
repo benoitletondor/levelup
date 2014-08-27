@@ -11,19 +11,16 @@ class GameStage implements ContactListener
     
 // ------------------------------------------->
         
-    GameStage(Stage stage, Renderer renderer, StageContactListener contactListener)
+    GameStage(Stage this._stage, Renderer this._renderer, StageContactListener this._contactListener)
     {
-        assert(stage != null);
-        assert(renderer != null);
-        
-        _stage = stage;
-        _renderer = renderer;
+        assert(_stage != null);
+        assert(_renderer != null);
         
         // Create Box2d world
         _world = new World(new Vector2(0.0, 500.0), true, new DefaultWorldPool()); //TODO gravity  
         
         // Add contact listener if any
-        if( contactListener != null )
+        if( _contactListener != null )
         {
             _world.contactListener = this;
         }
