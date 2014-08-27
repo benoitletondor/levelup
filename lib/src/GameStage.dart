@@ -1,16 +1,17 @@
 part of levelup;
 
-class GameStage
+class GameStage implements ContactListener
 {
-    static Stage _stage;
-    static Renderer _renderer;
-    static World _world;
+    Stage _stage;
+    Renderer _renderer;
+    World _world;
+    StageContactListener _contactListener;
     
-    static Set<PhysicsObject> _physicsObjects = new Set<PhysicsObject>();
+    Set<PhysicsObject> _physicsObjects = new Set<PhysicsObject>();
     
 // ------------------------------------------->
         
-    static void _init(Stage stage, Renderer renderer, StageContactListener contactListener)
+    GameStage(Stage stage, Renderer renderer, StageContactListener contactListener)
     {
         assert(stage != null);
         assert(renderer != null);
@@ -19,23 +20,23 @@ class GameStage
         _renderer = renderer;
         
         // Create Box2d world
-        _world = new World(new Vector2(0.0, 50.0), true, new DefaultWorldPool()); //TODO gravity  
+        _world = new World(new Vector2(0.0, 500.0), true, new DefaultWorldPool()); //TODO gravity  
         
         // Add contact listener if any
         if( contactListener != null )
         {
-            _world.contactListener = new _Listener(contactListener);
+            _world.contactListener = this;
         }
        
         // Main rendering loop
         RenderingManager.scheduleRenderingAction(_renderLoop);
     }
     
-    static CanvasElement get view => _renderer.view;
+    CanvasElement get view => _renderer.view;
     
 // ------------------------------------------->
     
-    static void addChild(DisplayObject displayObject)
+    void addChild(DisplayObject displayObject)
     {
         assert(displayObject != null);
         
@@ -49,7 +50,7 @@ class GameStage
         _stage.addChild(displayObject);
     }
     
-    static Body _createBody(PhysicsObject object)
+    Body _createBody(PhysicsObject object)
     {
         BodyDef def = new BodyDef()
             ..type = object.bodyType
@@ -60,7 +61,7 @@ class GameStage
             ..createFixture(object.buildFixtureDef()..userData = object); //FIXME circular reference are probably bad
     }
     
-    static void removeChild(DisplayObject displayObject)
+    void removeChild(DisplayObject displayObject)
     {
         assert(displayObject != null);
         
@@ -81,9 +82,9 @@ class GameStage
     
 // ------------------------------------------->
     
-    static void _renderLoop(num dt)
+    void _renderLoop(num dt)
     {
-        _world.step(100.0, 10, 10); //TODO dynmatic values
+        _world.step(1/60, 10, 10); //TODO dynmatic values
         
         for(PhysicsObject object in _physicsObjects)
         {
@@ -93,15 +94,9 @@ class GameStage
         
         _renderer.render(_stage);
     }
-}
-
-class _Listener implements ContactListener
-{
-    StageContactListener _contactListener;
     
-    _Listener(StageContactListener this._contactListener);
-    
-// ----------------------------------------->
+// ------------------------------------------->
+// Contact Listener
     
     void beginContact(Contact contact)
     {
