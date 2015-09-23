@@ -16,5 +16,5 @@ abstract class PhysicsObject
     
     FixtureDef buildFixtureDef();
     
-    int get bodyType;
+    BodyType get bodyType;
 }

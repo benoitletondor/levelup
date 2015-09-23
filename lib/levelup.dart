@@ -2,7 +2,7 @@ library levelup;
 
 import 'dart:math';
 import 'dart:html';
-import 'package:pixi2dart/pixi2dart.dart';
+import 'package:Pixi2dart/pixi2dart.dart';
 import 'package:box2d/box2d.dart';
 
 part 'src/RenderingManager.dart';

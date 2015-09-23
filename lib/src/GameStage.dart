@@ -17,12 +17,12 @@ class GameStage implements ContactListener
         assert(_renderer != null);
         
         // Create Box2d world
-        _world = new World(new Vector2(0.0, 500.0), true, new DefaultWorldPool()); //TODO gravity  
+        _world = new World.withPool(new Vector2(0.0, 500.0), new DefaultWorldPool(100, 10)); //TODO gravity  
         
         // Add contact listener if any
         if( _contactListener != null )
         {
-            _world.contactListener = this;
+            _world.setContactListener(this);
         }
        
         // Main rendering loop
@@ -57,7 +57,7 @@ class GameStage implements ContactListener
             ..angle = MathHelper.degreeToRadian(object.rotation);
         
         return _world.createBody(def)
-            ..createFixture(object.buildFixtureDef()..userData = object); //FIXME circular reference are probably bad
+            ..createFixtureFromFixtureDef(object.buildFixtureDef()..userData = object); //FIXME circular reference are probably bad
     }
     
     void removeChild(DisplayObject displayObject)
@@ -68,7 +68,7 @@ class GameStage implements ContactListener
         {
             PhysicsObject object = displayObject as PhysicsObject;
             
-            object.body.fixtureList.userData = null;
+            object.body.getFixtureList().userData = null;
             object.body.userData = null;
             _world.destroyBody(object.body);
             object.body = null;
@@ -83,12 +83,12 @@ class GameStage implements ContactListener
     
     void _renderLoop(num dt)
     {
-        _world.step(1/60, 10, 10); //TODO dynmatic values
+        _world.stepDt(1/60, 10, 10); //TODO dynmatic values
         
         for(PhysicsObject object in _physicsObjects)
         {
             object.position = new Point(object.body.position.x, object.body.position.y);
-            object.rotation = MathHelper.radianToDegree(object.body.angle);
+            object.rotation = MathHelper.radianToDegree(object.body.getAngle());
         }
         
         _renderer.render(_stage);

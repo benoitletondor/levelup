@@ -7,4 +7,4 @@ dependencies:
   Pixi2dart:
     version: any
     path: ../Pixi2dart/
-  box2d: "0.1.7"
+  box2d: "0.2.0"

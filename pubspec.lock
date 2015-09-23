@@ -10,7 +10,7 @@ packages:
   box2d:
     description: box2d
     source: hosted
-    version: "0.1.7"
+    version: "0.2.0"
   browser:
     description: browser
     source: hosted
