@@ -2,18 +2,19 @@ part of levelup;
 
 class GameStage implements ContactListener
 {
-    Stage _stage;
+    Container _container;
     Renderer _renderer;
     World _world;
     StageContactListener _contactListener;
+    CanvasRenderingContext2D _debugCtx;
     
     Set<PhysicsObject> _physicsObjects = new Set<PhysicsObject>();
     
 // ------------------------------------------->
         
-    GameStage(Stage this._stage, Renderer this._renderer, StageContactListener this._contactListener)
+    GameStage(Container this._container, Renderer this._renderer, StageContactListener this._contactListener)
     {
-        assert(_stage != null);
+        assert(_container != null);
         assert(_renderer != null);
         
         // Create Box2d world
@@ -46,7 +47,7 @@ class GameStage implements ContactListener
             _physicsObjects.add(object);
         }
         
-        _stage.addChild(displayObject);
+        _container.addChild(displayObject);
     }
     
     Body _createBody(PhysicsObject object)
@@ -54,7 +55,8 @@ class GameStage implements ContactListener
         BodyDef def = new BodyDef()
             ..type = object.bodyType
             ..position.setValues(object.position.x.toDouble(), object.position.y.toDouble())
-            ..angle = MathHelper.degreeToRadian(object.rotation);
+            ..angle = MathHelper.degreeToRadian(object.rotation)
+            ..allowSleep = object.allowBodySleep;
         
         return _world.createBody(def)
             ..createFixtureFromFixtureDef(object.buildFixtureDef()..userData = object); //FIXME circular reference are probably bad
@@ -76,14 +78,14 @@ class GameStage implements ContactListener
             _physicsObjects.remove(object);
         }
         
-        _stage.removeChild(displayObject);
+        _container.removeChild(displayObject);
     }
     
 // ------------------------------------------->
     
     void _renderLoop(num dt)
     {
-        _world.stepDt(1/60, 10, 10); //TODO dynmatic values
+        _world.stepDt(1/60, 10, 10); //TODO dynamic values
         
         for(PhysicsObject object in _physicsObjects)
         {
@@ -91,7 +93,43 @@ class GameStage implements ContactListener
             object.rotation = MathHelper.radianToDegree(object.body.getAngle());
         }
         
-        _renderer.render(_stage);
+        _renderer.render(_container);
+    }
+    
+// ------------------------------------------->
+// Debug draw
+    
+    void debugInCanvas(CanvasElement canvas)
+    {
+        if( _debugCtx != null )
+        {
+            stopDebug();
+        }
+        
+        var viewport = new CanvasViewportTransform(new Vector2(canvas.width / 2.0, canvas.height / 2.0), new Vector2(canvas.width.toDouble(), canvas.height.toDouble()))
+            ..scale = 1.0
+            ..yFlip = false;
+        
+        _debugCtx = canvas.context2D;
+        
+        _world.debugDraw = new CanvasDraw(viewport, _debugCtx);
+        RenderingManager.scheduleRenderingAction(_debugLoop);
+    }
+    
+    void stopDebug()
+    {
+        if( _debugCtx != null )
+        {
+            _world.debugDraw = null;
+            _debugCtx = null;
+            RenderingManager.unscheduleRenderingAction(_debugLoop);
+        }
+    }
+    
+    void _debugLoop(num dt)
+    {
+        _debugCtx.clearRect(0, 0, 400, 400);        
+        _world.drawDebugData();
     }
     
 // ------------------------------------------->
