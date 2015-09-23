@@ -10,16 +10,20 @@ part 'src/RenderingManager.dart';
 part 'src/GameStage.dart';
 part 'src/PhysicsObject.dart';
 part 'src/StageContactListener.dart';
+part 'src/KeyListener.dart';
 part 'src/helper/MathHelper.dart';
 
 class LevelUp
 {
     static GameStage _mainStage;
+    static KeyListener _keyListener;
     
-    static void initStage(num width, num height, StageContactListener contactListener)
+    static void init(num width, num height, StageContactListener contactListener)
     {
         _mainStage = new GameStage(new Container(), new AutoDetectRenderer(width, height), contactListener);
+        _keyListener = new KeyListener();
     }
     
     static GameStage get mainStage => _mainStage;
+    static KeyListener get keyListener => _keyListener;
 }
