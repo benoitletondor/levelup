@@ -105,7 +105,22 @@ class GameStage implements ContactListener
         {
             stopDebug();
         }
+         
+        // Revert Y axis (since debug is inverted)
+        var cssAtribute = canvas.getAttribute("style");
+        if( cssAtribute != null )
+        {
+            cssAtribute += ";";
+        }
+        else
+        {
+            cssAtribute = "";
+        }
         
+        cssAtribute +="transform: scaleY(-1)";
+        canvas.setAttribute("style", cssAtribute);
+        
+        // Create and asign debug viewport
         var viewport = new CanvasViewportTransform(new Vector2(canvas.width / 2.0, canvas.height / 2.0), new Vector2(canvas.width.toDouble(), canvas.height.toDouble()))
             ..scale = 1.0
             ..yFlip = false;
