@@ -1,6 +1,6 @@
 part of levelup;
 
-abstract class PhysicsObject
+abstract class PhysicsItem
 {
     Body get body;
     

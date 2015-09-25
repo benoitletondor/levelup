@@ -2,7 +2,7 @@ part of levelup;
 
 abstract class StageContactListener
 {
-    void onContactBegin(DisplayObject spriteA, DisplayObject spriteB, Contact contact);
+    void onContactBegin(Item spriteA, Item spriteB, Contact contact);
     
-    void onContactEnd(DisplayObject spriteA, DisplayObject spriteB, Contact contact);
+    void onContactEnd(Item spriteA, Item spriteB, Contact contact);
 }

@@ -2,19 +2,17 @@ part of levelup;
 
 class GameStage implements ContactListener
 {
-    Container _container;
     Renderer _renderer;
     World _world;
     StageContactListener _contactListener;
     CanvasRenderingContext2D _debugCtx;
     
-    Set<PhysicsObject> _physicsObjects = new Set<PhysicsObject>();
+    Set<PhysicsItem> _physicsObjects = new Set<PhysicsItem>();
     
 // ------------------------------------------->
         
-    GameStage(Container this._container, Renderer this._renderer, StageContactListener this._contactListener)
+    GameStage(Renderer this._renderer, StageContactListener this._contactListener)
     {
-        assert(_container != null);
         assert(_renderer != null);
         
         // Create Box2d world
@@ -34,21 +32,21 @@ class GameStage implements ContactListener
         
 // ------------------------------------------->
     
-    void addChild(DisplayObject displayObject)
+    void addChild(Item displayObject)
     {
         assert(displayObject != null);
         
-        if( displayObject is PhysicsObject )
+        if( displayObject is PhysicsItem )
         {
-            PhysicsObject object = displayObject as PhysicsObject;
+            PhysicsItem object = displayObject as PhysicsItem;
             object.body = _createBody(object);
             _physicsObjects.add(object);
         }
         
-        _container.addChild(displayObject);
+        _renderer.addChild(displayObject);
     }
     
-    Body _createBody(PhysicsObject object)
+    Body _createBody(PhysicsItem object)
     {
         BodyDef def = object.bodyDef
             ..position.setValues(object.position.x.toDouble(), object.position.y.toDouble())
@@ -58,13 +56,13 @@ class GameStage implements ContactListener
             ..createFixtureFromFixtureDef(object.buildFixtureDef()..userData = object); //FIXME circular reference are probably bad
     }
     
-    void removeChild(DisplayObject displayObject)
+    void removeChild(Item displayObject)
     {
         assert(displayObject != null);
         
-        if( displayObject is PhysicsObject )
+        if( displayObject is PhysicsItem )
         {
-            PhysicsObject object = displayObject as PhysicsObject;
+            PhysicsItem object = displayObject as PhysicsItem;
             
             object.body.getFixtureList().userData = null;
             object.body.userData = null;
@@ -74,7 +72,7 @@ class GameStage implements ContactListener
             _physicsObjects.remove(object);
         }
         
-        _container.removeChild(displayObject);
+        _renderer.removeChild(displayObject);
     }
     
 // ------------------------------------------->
@@ -83,13 +81,13 @@ class GameStage implements ContactListener
     {
         _world.stepDt(1/60, 10, 10); //TODO dynamic values
         
-        for(PhysicsObject object in _physicsObjects)
+        for(PhysicsItem object in _physicsObjects)
         {
             object.position = new Point(object.body.position.x, object.body.position.y);
             object.rotation = MathHelper.radianToDegree(object.body.getAngle());
         }
         
-        _renderer.render(_container);
+        _renderer.render();
     }
     
 // ------------------------------------------->
@@ -148,16 +146,16 @@ class GameStage implements ContactListener
     
     void beginContact(Contact contact)
     {
-        DisplayObject displayObjectA = contact.fixtureA.userData as DisplayObject;
-        DisplayObject displayObjectB = contact.fixtureB.userData as DisplayObject;
+        Item displayObjectA = contact.fixtureA.userData as Item;
+        Item displayObjectB = contact.fixtureB.userData as Item;
         
         _contactListener.onContactBegin(displayObjectA, displayObjectB, contact);
     }
 
     void endContact(Contact contact)
     {
-        DisplayObject displayObjectA = contact.fixtureA.userData as DisplayObject;
-        DisplayObject displayObjectB = contact.fixtureB.userData as DisplayObject;
+        Item displayObjectA = contact.fixtureA.userData as Item;
+        Item displayObjectB = contact.fixtureB.userData as Item;
         
         _contactListener.onContactEnd(displayObjectA, displayObjectB, contact);
     }

@@ -2,25 +2,27 @@ library levelup;
 
 import 'dart:math';
 import 'dart:html';
-import 'package:Pixi2dart/pixi2dart.dart';
 import 'package:box2d/box2d.dart';
 import 'package:box2d/box2d_browser.dart';
 
 part 'src/RenderingManager.dart';
 part 'src/GameStage.dart';
-part 'src/PhysicsObject.dart';
 part 'src/StageContactListener.dart';
 part 'src/KeyListener.dart';
 part 'src/helper/MathHelper.dart';
+
+part 'src/renderer/PhysicsItem.dart';
+part 'src/renderer/Renderer.dart';
+part 'src/renderer/Item.dart';
 
 class LevelUp
 {
     static GameStage _mainStage;
     static KeyListener _keyListener;
     
-    static void init(num width, num height, StageContactListener contactListener)
+    static void init(Renderer renderer, StageContactListener contactListener)
     {
-        _mainStage = new GameStage(new Container(), new AutoDetectRenderer(width, height), contactListener);
+        _mainStage = new GameStage(renderer, contactListener);
         _keyListener = new KeyListener();
     }
     

@@ -1,10 +1,7 @@
 name: LevelUp
 version: 0.0.1
 author: Benoit Letondor
-description: 2D game framework
+description: 2D Dart game framework
 dependencies:
+  box2d: 0.2.0
   browser: any
-  Pixi2dart:
-    version: any
-    path: ../Pixi2dart/
-  box2d: "0.2.0"
