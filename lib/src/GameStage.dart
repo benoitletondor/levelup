@@ -31,9 +31,7 @@ class GameStage implements ContactListener
     }
     
     CanvasElement get view => _renderer.view;
-    
-    World get world => _world;
-    
+        
 // ------------------------------------------->
     
     void addChild(DisplayObject displayObject)
@@ -52,11 +50,9 @@ class GameStage implements ContactListener
     
     Body _createBody(PhysicsObject object)
     {
-        BodyDef def = new BodyDef()
-            ..type = object.bodyType
+        BodyDef def = object.bodyDef
             ..position.setValues(object.position.x.toDouble(), object.position.y.toDouble())
-            ..angle = MathHelper.degreeToRadian(object.rotation)
-            ..allowSleep = object.allowBodySleep;
+            ..angle = MathHelper.degreeToRadian(object.rotation);
         
         return _world.createBody(def)
             ..createFixtureFromFixtureDef(object.buildFixtureDef()..userData = object); //FIXME circular reference are probably bad
@@ -143,7 +139,7 @@ class GameStage implements ContactListener
     
     void _debugLoop(num dt)
     {
-        _debugCtx.clearRect(0, 0, 400, 400);        
+        _debugCtx.clearRect(0, 0, _debugCtx.canvas.width, _debugCtx.canvas.height);      
         _world.drawDebugData();
     }
     

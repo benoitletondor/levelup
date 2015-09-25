@@ -16,7 +16,5 @@ abstract class PhysicsObject
     
     FixtureDef buildFixtureDef();
     
-    BodyType get bodyType;
-    
-    bool get allowBodySleep;
+    BodyDef get bodyDef;
 }
