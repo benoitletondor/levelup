@@ -1,6 +1,6 @@
 library levelup;
 
-import 'dart:math';
+import 'dart:math' as math;
 import 'dart:html';
 import 'package:box2d/box2d.dart';
 import 'package:box2d/box2d_browser.dart';
