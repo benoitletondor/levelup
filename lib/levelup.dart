@@ -2,8 +2,10 @@ library levelup;
 
 import 'dart:math' as math;
 import 'dart:html';
+
 import 'package:box2d/box2d.dart';
 import 'package:box2d/box2d_browser.dart';
+import 'package:Pixi2dart/pixi2dart.dart' as PIXI;
 
 part 'src/RenderingManager.dart';
 part 'src/GameStage.dart';
@@ -14,16 +16,16 @@ part 'src/helper/MathHelper.dart';
 part 'src/renderer/PhysicsItem.dart';
 part 'src/renderer/Renderer.dart';
 part 'src/renderer/Item.dart';
+part 'src/renderer/pixi/PixiItem.dart';
+part 'src/renderer/pixi/PixiPhysicsItem.dart';
+part 'src/renderer/pixi/PixiRenderer.dart';
 
-class LevelUp {
-  static GameStage _mainStage;
-  static KeyListener _keyListener;
-
-  static void init(Renderer renderer, StageContactListener contactListener) {
-    _mainStage = new GameStage(renderer, contactListener);
+// Expose keylistener singleton
+KeyListener _keyListener;
+KeyListener get keyListener {
+  if (_keyListener == null) {
     _keyListener = new KeyListener();
   }
 
-  static GameStage get mainStage => _mainStage;
-  static KeyListener get keyListener => _keyListener;
+  return _keyListener;
 }
