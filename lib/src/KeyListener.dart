@@ -4,8 +4,8 @@ class KeyListener {
   Set<int> _pressedKeys = new Set<int>();
 
   KeyListener._internal() {
-    document.onKeyDown.listen(_onKeyDown);
-    document.onKeyUp.listen(_onKeyUp);
+    html.document.onKeyDown.listen(_onKeyDown);
+    html.document.onKeyUp.listen(_onKeyUp);
   }
 
 // ---------------------------------------->
@@ -16,11 +16,11 @@ class KeyListener {
 
 // ---------------------------------------->
 
-  void _onKeyDown(KeyboardEvent event) {
+  void _onKeyDown(html.KeyboardEvent event) {
     _pressedKeys.add(event.keyCode);
   }
 
-  void _onKeyUp(KeyboardEvent event) {
+  void _onKeyUp(html.KeyboardEvent event) {
     _pressedKeys.remove(event.keyCode);
   }
 }

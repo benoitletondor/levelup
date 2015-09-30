@@ -1,7 +1,7 @@
 part of levelup;
 
 abstract class Renderer {
-  CanvasElement get view;
+  html.CanvasElement get view;
 
   void render();
 

@@ -14,7 +14,7 @@ class RenderingManager {
 
     // If they were no actions before, start scheduling
     if (_actions.length == 1) {
-      window.animationFrame.then(_loop);
+      html.window.animationFrame.then(_loop);
     }
   }
 
@@ -28,7 +28,7 @@ class RenderingManager {
 
   static void _loop(num dt) {
     if (!_actions.isEmpty) {
-      window.animationFrame.then(_loop);
+      html.window.animationFrame.then(_loop);
     }
 
     _actions.forEach((action) {

@@ -9,9 +9,15 @@ class DragNDropManager {
   List<Vector2> _draggedItemsOffset = new List<Vector2>();
 
   DragNDropManager._internal() {
-    document.onMouseDown.listen(_onMouseDown);
-    document.onMouseUp.listen(_onMouseUp);
-    document.onMouseMove.listen(_onMouseMove);
+    if (html.TouchEvent.supported) {
+      html.document.onTouchEnd.listen(_onTouchEnd);
+      html.document.onTouchStart.listen(_onTouchStart);
+      html.document.onTouchMove.listen(_onTouchMove);
+    } else {
+      html.document.onMouseDown.listen(_onMouseDown);
+      html.document.onMouseMove.listen(_onMouseMove);
+      html.document.onMouseUp.listen(_onMouseUp);
+    }
   }
 
 // ---------------------------------------->
@@ -26,18 +32,12 @@ class DragNDropManager {
 
 // ---------------------------------------->
 
-  void _onMouseDown(MouseEvent event) {
+  void _onStartDrag() {
     RenderingManager.scheduleRenderingAction(_renderLoop);
-
-    _mousePosition.setValues(
-        event.client.x.toDouble(), event.client.y.toDouble());
 
     if (!_dragNDropablesItems.isEmpty) {
       for (PhysicsItem item in _dragNDropablesItems) {
-        Vector2 mousePosition =
-            new Vector2(event.client.x.toDouble(), event.client.y.toDouble());
-
-        if (item.body.getFixtureList().testPoint(mousePosition)) {
+        if (item.body.getFixtureList().testPoint(_mousePosition)) {
           _draggedItems.add(item);
           _draggedItemsOffset.add(new Vector2(
               item.position.x - _mousePosition.x,
@@ -47,15 +47,10 @@ class DragNDropManager {
     }
   }
 
-  void _onMouseUp(MouseEvent event) {
+  void _onDragStop() {
     _draggedItems.clear();
     _draggedItemsOffset.clear();
     RenderingManager.unscheduleRenderingAction(_renderLoop);
-  }
-
-  void _onMouseMove(MouseEvent event) {
-    _mousePosition.setValues(
-        event.client.x.toDouble(), event.client.y.toDouble());
   }
 
   void _renderLoop(num dt) {
@@ -66,5 +61,43 @@ class DragNDropManager {
           MathHelper.degreeToRadian(item.rotation).toDouble());
       i++;
     }
+  }
+
+// ---------------------------------------->
+
+  void _onMouseDown(html.MouseEvent event) {
+    _mousePosition.setValues(
+        event.client.x.toDouble(), event.client.y.toDouble());
+
+    _onStartDrag();
+  }
+
+  void _onTouchStart(html.TouchEvent event) {
+    event.preventDefault();
+
+    _mousePosition.setValues(event.touches.first.client.x.toDouble(),
+        event.touches.first.client.y.toDouble());
+
+    _onStartDrag();
+  }
+
+  void _onMouseUp(html.MouseEvent event) {
+    _onDragStop();
+  }
+
+  void _onTouchEnd(html.TouchEvent event) {
+    _onDragStop();
+  }
+
+  void _onMouseMove(html.MouseEvent event) {
+    _mousePosition.setValues(
+        event.client.x.toDouble(), event.client.y.toDouble());
+  }
+
+  void _onTouchMove(html.TouchEvent event) {
+    event.preventDefault();
+
+    _mousePosition.setValues(event.touches.first.client.x.toDouble(),
+        event.touches.first.client.y.toDouble());
   }
 }

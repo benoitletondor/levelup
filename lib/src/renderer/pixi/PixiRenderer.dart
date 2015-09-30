@@ -13,7 +13,7 @@ class PixiRenderer implements Renderer {
   void removeChild(PixiItem child) =>
       _container.removeChild(child._displayObject);
 
-  CanvasElement get view => _renderer.view;
+  html.CanvasElement get view => _renderer.view;
 
   void render() => _renderer.render(_container);
 }

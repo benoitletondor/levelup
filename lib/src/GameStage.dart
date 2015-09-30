@@ -4,7 +4,7 @@ class GameStage implements ContactListener {
   Renderer _renderer;
   World _world;
   StageContactListener _contactListener;
-  CanvasRenderingContext2D _debugCtx;
+  html.CanvasRenderingContext2D _debugCtx;
   DragNDropManager _dragNDropManager;
 
   Set<PhysicsItem> _physicsObjects = new Set<PhysicsItem>();
@@ -28,7 +28,7 @@ class GameStage implements ContactListener {
     RenderingManager.scheduleRenderingAction(_renderLoop);
   }
 
-  CanvasElement get view => _renderer.view;
+  html.CanvasElement get view => _renderer.view;
 
   set gravity(Vector2 gravity) => _world.setGravity(gravity);
 
@@ -94,7 +94,7 @@ class GameStage implements ContactListener {
 
     for (PhysicsItem object in _physicsObjects) {
       object.position =
-          new Point(object.body.position.x, object.body.position.y);
+          new html.Point(object.body.position.x, object.body.position.y);
       object.rotation = MathHelper.radianToDegree(object.body.getAngle());
     }
 
@@ -104,7 +104,7 @@ class GameStage implements ContactListener {
 // ------------------------------------------->
 // Debug draw
 
-  void debugInCanvas(CanvasElement canvas) {
+  void debugInCanvas(html.CanvasElement canvas) {
     if (_debugCtx != null) {
       stopDebug();
     }
