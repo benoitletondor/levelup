@@ -12,6 +12,7 @@ part 'src/GameStage.dart';
 part 'src/StageContactListener.dart';
 part 'src/KeyListener.dart';
 part 'src/helper/MathHelper.dart';
+part 'src/DragNDropManager.dart';
 
 part 'src/renderer/PhysicsItem.dart';
 part 'src/renderer/Renderer.dart';
@@ -24,7 +25,7 @@ part 'src/renderer/pixi/PixiRenderer.dart';
 KeyListener _keyListener;
 KeyListener get keyListener {
   if (_keyListener == null) {
-    _keyListener = new KeyListener();
+    _keyListener = new KeyListener._internal();
   }
 
   return _keyListener;

@@ -3,7 +3,7 @@ part of levelup;
 class KeyListener {
   Set<int> _pressedKeys = new Set<int>();
 
-  KeyListener() {
+  KeyListener._internal() {
     document.onKeyDown.listen(_onKeyDown);
     document.onKeyUp.listen(_onKeyUp);
   }

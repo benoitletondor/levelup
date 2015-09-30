@@ -5,6 +5,7 @@ class GameStage implements ContactListener {
   World _world;
   StageContactListener _contactListener;
   CanvasRenderingContext2D _debugCtx;
+  DragNDropManager _dragNDropManager;
 
   Set<PhysicsItem> _physicsObjects = new Set<PhysicsItem>();
 
@@ -16,7 +17,7 @@ class GameStage implements ContactListener {
 
     // Create Box2d world
     _world = new World.withPool(
-        new Vector2(0.0, 500.0), new DefaultWorldPool(100, 10)); //TODO gravity
+        new Vector2(0.0, 0.0), new DefaultWorldPool(100, 10)); //TODO gravity
 
     // Add contact listener if any
     if (_contactListener != null) {
@@ -28,6 +29,16 @@ class GameStage implements ContactListener {
   }
 
   CanvasElement get view => _renderer.view;
+
+  set gravity(Vector2 gravity) => _world.setGravity(gravity);
+
+  DragNDropManager get dragNDropManager {
+    if (_dragNDropManager == null) {
+      _dragNDropManager = new DragNDropManager._internal();
+    }
+
+    return _dragNDropManager;
+  }
 
 // ------------------------------------------->
 
@@ -66,6 +77,11 @@ class GameStage implements ContactListener {
       object.body = null;
 
       _physicsObjects.remove(object);
+
+      if (_dragNDropManager != null) {
+        // Remove from draggable object in case it's added
+        _dragNDropManager.removeDragNDropableItem(object);
+      }
     }
 
     _renderer.removeChild(displayObject);
