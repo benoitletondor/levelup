@@ -7,6 +7,9 @@ class GameStage implements ContactListener {
   html.CanvasRenderingContext2D _debugCtx;
   DragNDropManager _dragNDropManager;
 
+  bool _paused = false;
+  List<Vector2> _savedVelocities = new List<Vector2>();
+
   Set<PhysicsItem> _physicsObjects = new Set<PhysicsItem>();
 
 // ------------------------------------------->
@@ -90,15 +93,53 @@ class GameStage implements ContactListener {
 // ------------------------------------------->
 
   void _renderLoop(num dt) {
-    _world.stepDt(1 / 60, 10, 10); //TODO dynamic values
+    if (!_paused) {
+      _world.stepDt(1 / 60, 10, 10); //TODO dynamic values
 
-    for (PhysicsItem object in _physicsObjects) {
-      object.position =
-          new html.Point(object.body.position.x, object.body.position.y);
-      object.rotation = MathHelper.radianToDegree(object.body.getAngle());
+      for (PhysicsItem object in _physicsObjects) {
+        object.position =
+            new html.Point(object.body.position.x, object.body.position.y);
+        object.rotation = MathHelper.radianToDegree(object.body.getAngle());
+      }
+
+      _renderer.render();
+    }
+  }
+
+// ------------------------------------------->
+// Pause/Resume
+
+  void pause() {
+    if (_paused) {
+      return;
     }
 
-    _renderer.render();
+    _paused = true;
+
+    for (PhysicsItem object in _physicsObjects) {
+      _savedVelocities.add(object.body.getLinearVelocityFromLocalPoint(
+          object.body.getLocalCenter())); // TODO rotation ?
+      _world.destroyBody(object.body);
+    }
+
+    if (_dragNDropManager != null) {
+      // Stop drag & drops if any
+      _dragNDropManager._onDragStop();
+    }
+  }
+
+  void resume() {
+    int i = 0;
+    for (PhysicsItem object in _physicsObjects) {
+      object.body = _createBody(object);
+      object.body.applyLinearImpulse(
+          _savedVelocities[i], object.body.getLocalCenter(), true);
+      i++;
+    }
+
+    _savedVelocities.clear();
+
+    _paused = false;
   }
 
 // ------------------------------------------->
