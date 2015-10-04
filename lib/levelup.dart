@@ -2,6 +2,7 @@ library levelup;
 
 import 'dart:math' as math;
 import 'dart:html' as html;
+import 'dart:async';
 
 import 'package:box2d/box2d.dart';
 import 'package:box2d/box2d_browser.dart';

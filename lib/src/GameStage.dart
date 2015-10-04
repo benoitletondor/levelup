@@ -8,7 +8,6 @@ class GameStage implements ContactListener {
   DragNDropManager _dragNDropManager;
 
   bool _paused = false;
-  List<Vector2> _savedVelocities = new List<Vector2>();
 
   Set<PhysicsItem> _physicsObjects = new Set<PhysicsItem>();
 
@@ -20,7 +19,7 @@ class GameStage implements ContactListener {
 
     // Create Box2d world
     _world = new World.withPool(
-        new Vector2(0.0, 0.0), new DefaultWorldPool(100, 10)); //TODO gravity
+        new Vector2(0.0, 0.0), new DefaultWorldPool(100, 10)); //TODO values?
 
     // Add contact listener if any
     if (_contactListener != null) {
@@ -61,7 +60,7 @@ class GameStage implements ContactListener {
     BodyDef def = object.bodyDef
       ..position
           .setValues(object.position.x.toDouble(), object.position.y.toDouble())
-      ..angle = MathHelper.degreeToRadian(object.rotation);
+      ..angle = object.rotation.toDouble();
 
     return _world.createBody(def)
       ..createFixtureFromFixtureDef(object.buildFixtureDef()
@@ -93,17 +92,15 @@ class GameStage implements ContactListener {
 // ------------------------------------------->
 
   void _renderLoop(num dt) {
-    if (!_paused) {
-      _world.stepDt(1 / 60, 10, 10); //TODO dynamic values
+    _world.stepDt(1 / 60, 10, 10); //TODO dynamic values
 
-      for (PhysicsItem object in _physicsObjects) {
-        object.position =
-            new html.Point(object.body.position.x, object.body.position.y);
-        object.rotation = MathHelper.radianToDegree(object.body.getAngle());
-      }
-
-      _renderer.render();
+    for (PhysicsItem object in _physicsObjects) {
+      object.position =
+          new math.Point(object.body.position.x, object.body.position.y);
+      object.rotation = object.body.getAngle();
     }
+
+    _renderer.render();
   }
 
 // ------------------------------------------->
@@ -114,12 +111,11 @@ class GameStage implements ContactListener {
       return;
     }
 
+    RenderingManager.unscheduleRenderingAction(_renderLoop);
     _paused = true;
 
     for (PhysicsItem object in _physicsObjects) {
-      _savedVelocities.add(object.body.getLinearVelocityFromLocalPoint(
-          object.body.getLocalCenter())); // TODO rotation ?
-      _world.destroyBody(object.body);
+      object.paused = true;
     }
 
     if (_dragNDropManager != null) {
@@ -129,17 +125,16 @@ class GameStage implements ContactListener {
   }
 
   void resume() {
-    int i = 0;
-    for (PhysicsItem object in _physicsObjects) {
-      object.body = _createBody(object);
-      object.body.applyLinearImpulse(
-          _savedVelocities[i], object.body.getLocalCenter(), true);
-      i++;
+    if (!_paused) {
+      return;
     }
 
-    _savedVelocities.clear();
+    for (PhysicsItem object in _physicsObjects) {
+      object.paused = false;
+    }
 
     _paused = false;
+    RenderingManager.scheduleRenderingAction(_renderLoop);
   }
 
 // ------------------------------------------->

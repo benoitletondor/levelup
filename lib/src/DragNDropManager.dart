@@ -8,14 +8,15 @@ class DragNDropManager {
   List<PhysicsItem> _draggedItems = new List<PhysicsItem>();
   List<Vector2> _draggedItemsOffset = new List<Vector2>();
 
+  StreamSubscription<html.TouchEvent> _touchSubcription;
+  StreamSubscription<html.MouseEvent> _mouseSubcription;
+
   DragNDropManager._internal() {
     if (html.TouchEvent.supported) {
       html.document.onTouchEnd.listen(_onTouchEnd);
       html.document.onTouchStart.listen(_onTouchStart);
-      html.document.onTouchMove.listen(_onTouchMove);
     } else {
       html.document.onMouseDown.listen(_onMouseDown);
-      html.document.onMouseMove.listen(_onMouseMove);
       html.document.onMouseUp.listen(_onMouseUp);
     }
   }
@@ -37,7 +38,8 @@ class DragNDropManager {
 
     if (!_dragNDropablesItems.isEmpty) {
       for (PhysicsItem item in _dragNDropablesItems) {
-        if (item.body.getFixtureList().testPoint(_mousePosition)) {
+        if (item.body.getFixtureList() != null &&
+            item.body.getFixtureList().testPoint(_mousePosition)) {
           _draggedItems.add(item);
           _draggedItemsOffset.add(new Vector2(
               item.position.x - _mousePosition.x,
@@ -69,23 +71,45 @@ class DragNDropManager {
     _mousePosition.setValues(
         event.client.x.toDouble(), event.client.y.toDouble());
 
+    if (_mouseSubcription != null) {
+      _mouseSubcription.cancel();
+    }
+
+    _mouseSubcription = html.document.onMouseMove.listen(_onMouseMove);
+
     _onStartDrag();
   }
 
   void _onTouchStart(html.TouchEvent event) {
     event.preventDefault();
 
+    if (_touchSubcription != null) {
+      _touchSubcription.cancel();
+    }
+
     _mousePosition.setValues(event.touches.first.client.x.toDouble(),
         event.touches.first.client.y.toDouble());
+
+    _touchSubcription = html.document.onTouchMove.listen(_onTouchMove);
 
     _onStartDrag();
   }
 
   void _onMouseUp(html.MouseEvent event) {
+    if (_mouseSubcription != null) {
+      _mouseSubcription.cancel();
+      _mouseSubcription = null;
+    }
+
     _onDragStop();
   }
 
   void _onTouchEnd(html.TouchEvent event) {
+    if (_touchSubcription != null) {
+      _touchSubcription.cancel();
+      _touchSubcription = null;
+    }
+
     _onDragStop();
   }
 

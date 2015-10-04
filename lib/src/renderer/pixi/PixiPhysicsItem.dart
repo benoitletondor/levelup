@@ -1,15 +1,30 @@
 part of levelup;
 
 class PixiPhysicsItem extends PixiItem implements PhysicsItem {
+  bool paused = false;
+
   PixiPhysicsItem(PIXI.DisplayObject displayObject) : super(displayObject) {
     assert(displayObject is PhysicsItem);
   }
 
   PhysicsItem get _physicsObject => (_displayObject as PhysicsItem);
 
-  Body get body => _physicsObject.body;
+  Body get body {
+    if (paused) {
+      // Return stub body while paused to avoid transforming it
+      return new Body(new BodyDef(), null);
+    }
 
-  set body(Body body) => _physicsObject.body = body;
+    return _physicsObject.body;
+  }
+
+  set body(Body body) {
+    if (paused) {
+      return;
+    }
+
+    _physicsObject.body = body;
+  }
 
   FixtureDef buildFixtureDef() => _physicsObject.buildFixtureDef();
 

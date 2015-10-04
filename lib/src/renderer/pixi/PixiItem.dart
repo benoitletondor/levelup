@@ -1,11 +1,13 @@
 part of levelup;
 
-class PixiItem implements Item {
-  PIXI.DisplayObject _displayObject;
+class PixiItem<T extends PIXI.DisplayObject> implements Item<T> {
+  T _displayObject;
 
-  PixiItem(PIXI.DisplayObject this._displayObject) {
+  PixiItem(T this._displayObject) {
     assert(_displayObject != null);
   }
+
+  T get item => _displayObject;
 
   set position(math.Point point) =>
       _displayObject.position = new PIXI.Point.fromValues(point.x, point.y);

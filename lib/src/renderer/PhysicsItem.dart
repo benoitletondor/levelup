@@ -1,6 +1,8 @@
 part of levelup;
 
 abstract class PhysicsItem {
+  bool paused = false;
+
   Body get body;
   set body(Body body);
 
