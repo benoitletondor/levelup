@@ -1,6 +1,6 @@
 part of levelup;
 
-class PixiPhysicsItem extends PixiItem implements PhysicsItem {
+class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T> implements PhysicsItem {
   bool paused = false;
 
   PixiPhysicsItem(PIXI.DisplayObject displayObject) : super(displayObject) {

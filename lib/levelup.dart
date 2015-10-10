@@ -6,7 +6,7 @@ import 'dart:async';
 
 import 'package:box2d/box2d.dart';
 import 'package:box2d/box2d_browser.dart';
-import 'package:Pixi2dart/pixi2dart.dart' as PIXI;
+import 'package:pixi2dart/pixi2dart.dart' as PIXI;
 
 part 'src/RenderingManager.dart';
 part 'src/GameStage.dart';
