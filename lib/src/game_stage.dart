@@ -115,7 +115,7 @@ class GameStage implements ContactListener {
     _paused = true;
 
     for (PhysicsItem object in _physicsObjects) {
-      object.paused = true;
+      object._paused = true;
     }
 
     if (_dragNDropManager != null) {
@@ -130,7 +130,7 @@ class GameStage implements ContactListener {
     }
 
     for (PhysicsItem object in _physicsObjects) {
-      object.paused = false;
+      object._paused = false;
     }
 
     _paused = false;

@@ -1,7 +1,7 @@
 part of levelup;
 
 class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T> implements PhysicsItem {
-  bool paused = false;
+  bool _paused = false;
 
   PixiPhysicsItem(PIXI.DisplayObject displayObject) : super(displayObject) {
     assert(displayObject is PhysicsItem);
@@ -10,7 +10,7 @@ class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T> implemen
   PhysicsItem get _physicsObject => (_displayObject as PhysicsItem);
 
   Body get body {
-    if (paused) {
+    if (_paused) {
       // Return stub body while paused to avoid transforming it
       return new Body(new BodyDef(), null);
     }
@@ -19,7 +19,7 @@ class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T> implemen
   }
 
   set body(Body body) {
-    if (paused) {
+    if (_paused) {
       return;
     }
 
