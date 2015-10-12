@@ -5,6 +5,10 @@ typedef void RenderingAction(num);
 class RenderingManager {
   static Set<RenderingAction> _actions = new Set<RenderingAction>();
 
+  // Use a queue for items to remove to prevent thread collision, removing them into the render loop
+  static ListQueue<RenderingAction> _actionsToRemove =
+      new ListQueue<RenderingAction>();
+
 // ------------------------------------------->
 
   static void scheduleRenderingAction(RenderingAction action) {
@@ -21,7 +25,7 @@ class RenderingManager {
   static void unscheduleRenderingAction(RenderingAction action) {
     assert(action != null);
 
-    _actions.remove(action);
+    _actionsToRemove.add(action);
   }
 
 // ------------------------------------------------>
@@ -34,5 +38,10 @@ class RenderingManager {
     _actions.forEach((action) {
       action(dt);
     });
+
+    if (!_actionsToRemove.isEmpty) {
+      RenderingAction action = _actionsToRemove.removeFirst();
+      _actions.remove(action);
+    }
   }
 }

@@ -73,7 +73,11 @@ class GameStage implements ContactListener {
     if (displayObject is PhysicsItem) {
       PhysicsItem object = displayObject as PhysicsItem;
 
-      object.body.getFixtureList().userData = null;
+      if (object.body.getFixtureList() != null) {
+        // Can happen in pause mode
+        object.body.getFixtureList().userData = null;
+      }
+
       object.body.userData = null;
       _world.destroyBody(object.body);
       object.body = null;
@@ -95,9 +99,12 @@ class GameStage implements ContactListener {
     _world.stepDt(1 / 60, 10, 10); //TODO dynamic values
 
     for (PhysicsItem object in _physicsObjects) {
-      object.position =
-          new math.Point(object.body.position.x, object.body.position.y);
-      object.rotation = object.body.getAngle();
+      if (!_paused) {
+        // Can happen when UI thread finishes after pause
+        object.position =
+            new math.Point(object.body.position.x, object.body.position.y);
+        object.rotation = object.body.getAngle();
+      }
     }
 
     _renderer.render();
@@ -111,8 +118,8 @@ class GameStage implements ContactListener {
       return;
     }
 
-    RenderingManager.unscheduleRenderingAction(_renderLoop);
     _paused = true;
+    RenderingManager.unscheduleRenderingAction(_renderLoop);
 
     for (PhysicsItem object in _physicsObjects) {
       object._paused = true;
