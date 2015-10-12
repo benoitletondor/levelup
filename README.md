@@ -86,7 +86,6 @@ void main() {
 }
 
 class Ground extends PIXI.Graphics implements LevelUp.PhysicsItem {
-  bool paused;
   Body body;
 
   Ground() : super() {
@@ -109,7 +108,6 @@ class Ground extends PIXI.Graphics implements LevelUp.PhysicsItem {
 }
 
 class Bunny extends PIXI.Sprite implements LevelUp.PhysicsItem {
-  bool paused;
   Body body;
 
   Bunny() : super(new PIXI.Texture.fromImage("bunny.gif"));
