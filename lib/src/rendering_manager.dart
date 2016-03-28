@@ -51,9 +51,9 @@ class RenderingManager {
       html.window.animationFrame.then(_loop);
     }
 
-    _actions.forEach((action) {
+    for (RenderingAction action in _actions) {
       action(dt);
-    });
+    }
 
     if (!_actionsToRemove.isEmpty) {
       RenderingAction action = _actionsToRemove.removeFirst();
