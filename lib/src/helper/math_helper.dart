@@ -20,4 +20,20 @@ class MathHelper {
   static num degreeToRadian(num degree) => degree * math.PI / 180;
 
   static num radianToDegree(num radian) => radian * 180 / math.PI;
+
+  static num radianAngleBetweenMouseAndObject(
+      math.Point mouse, math.Point object) {
+    return (math.PI / 2) + math.atan2(mouse.y - object.y, mouse.x - object.x);
+  }
+
+  static num degreeAngleBetweenMouseAndObject(
+      math.Point mouse, math.Point object) {
+    num angle = radianToDegree(radianAngleBetweenMouseAndObject(mouse, object));
+
+    if (angle < 0) {
+      angle = 360 - (-angle);
+    }
+
+    return angle;
+  }
 }

@@ -117,8 +117,8 @@ class GameStage implements ContactListener {
     for (PhysicsItem object in _physicsObjects) {
       if (!_paused) {
         // Can happen when UI thread finishes after pause
-        object.position =
-            new math.Point(object.body.position.x, object.body.position.y);
+        object.position = new math.Point(
+            object.body.worldCenter.x, object.body.worldCenter.y);
         object.rotation = object.body.getAngle();
       }
     }
