@@ -22,6 +22,7 @@ class GameStage implements ContactListener {
   StageContactListener _contactListener;
   html.CanvasRenderingContext2D _debugCtx;
   DragNDropManager _dragNDropManager;
+  Camera _camera;
 
   bool _paused = false;
 
@@ -29,9 +30,10 @@ class GameStage implements ContactListener {
 
 // ------------------------------------------->
 
-  GameStage(
-      Renderer this._renderer, StageContactListener this._contactListener) {
+  GameStage(Renderer this._renderer, StageContactListener this._contactListener,
+      Camera this._camera) {
     assert(_renderer != null);
+    assert(_camera != null);
 
     // Create Box2d world
     _world = new World.withPool(
@@ -111,19 +113,43 @@ class GameStage implements ContactListener {
 
 // ------------------------------------------->
 
+  void setCameraFocus(PhysicsItem focused, int xDeadZone, int yDeadZone) {
+    _camera.follow(focused, xDeadZone, yDeadZone);
+  }
+
+  int get cameraX => _camera._xView;
+
+  int get cameraY => _camera._yView;
+
+// ------------------------------------------->
+
   void _renderLoop(num dt) {
     _world.stepDt(1 / 60, 10, 10); //TODO dynamic values
+
+    _updateCamera();
 
     for (PhysicsItem object in _physicsObjects) {
       if (!_paused) {
         // Can happen when UI thread finishes after pause
         object.position = new math.Point(
-            object.body.worldCenter.x, object.body.worldCenter.y);
+            object.body.worldCenter.x - _camera._xView,
+            object.body.worldCenter.y - _camera._yView);
         object.rotation = object.body.getAngle();
       }
     }
 
     _renderer.render();
+  }
+
+  void _updateCamera() {
+    PhysicsItem followed = _camera._followed;
+    if (followed != null && followed.body != null && !_paused) {
+      followed.position = new math.Point(
+          followed.body.worldCenter.x, followed.body.worldCenter.y);
+      followed.rotation = followed.body.getAngle();
+
+      _camera.update();
+    }
   }
 
 // ------------------------------------------->

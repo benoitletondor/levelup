@@ -31,6 +31,7 @@ part 'src/stage_contact_listener.dart';
 part 'src/key_listener.dart';
 part 'src/helper/math_helper.dart';
 part 'src/drag_n_drop_manager.dart';
+part 'src/camera.dart';
 
 part 'src/renderer/physics_item.dart';
 part 'src/renderer/renderer.dart';

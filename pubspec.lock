@@ -2,17 +2,23 @@
 # See http://pub.dartlang.org/doc/glossary.html#lockfile
 packages:
   box2d:
-    description: box2d
+    description:
+      name: box2d
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
   browser:
-    description: browser
+    description:
+      name: browser
+      url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0+2"
   js:
-    description: js
+    description:
+      name: js
+      url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.6.0"
   pixi2dart:
     description:
       path: "../pixi2dart"
@@ -25,4 +31,4 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.3"
-sdk: ">=1.3.0-dev.4.1 <2.0.0"
+sdk: ">=1.13.0 <2.0.0"

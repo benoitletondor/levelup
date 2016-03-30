@@ -16,6 +16,7 @@ I created this for my own needs and it's far from final. Current APIs includes:
 - A rendering manager offering easy access to animation frames
 - Box2D wrapper for display object to easily implement physics
 - Pixi renderer
+- Camera management to easily implement a viewport
 - Drag&Drop API for both mouse and touch
 
 ### How to use
@@ -45,7 +46,7 @@ import 'package:box2d/box2d_browser.dart';
 - Import the Pixi.js file into your html:
 
 ```html
-<script src="packages/pixi2dart/js/pixi.js"></script>
+<script src="packages/pixi2dart/js/pixi.min.js"></script>
 ```
 
 That's it, you're ready to use LevelUp APIs to build your game.
@@ -55,8 +56,10 @@ That's it, you're ready to use LevelUp APIs to build your game.
 ```dart
 void main() {
   // Init stage
-  LevelUp.GameStage stage = new LevelUp.GameStage(new LevelUp.PixiRenderer(PIXI.autoDetectRenderer(600, 400)), new _ContactListener())
-    ..gravity = new Vector2(0.0, 500.0);
+  LevelUp.GameStage stage = new LevelUp.GameStage(new LevelUp.PixiRenderer(PIXI.autoDetectRenderer(600, 400)), 
+  	new _ContactListener(),
+  	new Camera(0, 0, 600, 400, 1000, 500, LevelUp.CameraAxis.BOTH))
+    	..gravity = new Vector2(0.0, 500.0);
 
   document.body.append(stage.view);
 
@@ -80,6 +83,9 @@ void main() {
   // Add them to display
   stage.addChild(ground);
   stage.addChild(bunny);
+  
+  // Set camera to follow the bunny with half height and width as camera deadzone
+  stage.setCameraFocus(bunny, 300, 200);
 
   // If you want to make an item draggable, just use the drag&drop manager
   stage.dragNDropManager.addDragNDropableItem(bunny);
