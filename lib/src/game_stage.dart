@@ -61,6 +61,7 @@ class GameStage implements ContactListener {
   }
 
 // ------------------------------------------->
+// Add-remove elements
 
   void addChild(Item displayObject) {
     assert(displayObject != null);
@@ -81,8 +82,8 @@ class GameStage implements ContactListener {
       ..angle = object.rotation.toDouble();
 
     return _world.createBody(def)
-      ..createFixtureFromFixtureDef(object.buildFixtureDef()
-        ..userData = object); //FIXME circular reference are probably bad
+      ..createFixtureFromFixtureDef(object.buildFixtureDef()..userData = object)
+      ..userData = object; //FIXME circular reference are probably bad
   }
 
   void removeChild(Item displayObject) {
@@ -112,6 +113,7 @@ class GameStage implements ContactListener {
   }
 
 // ------------------------------------------->
+// Camera
 
   void setCameraFocus(PhysicsItem focused, int xDeadZone, int yDeadZone) {
     _camera.follow(focused, xDeadZone, yDeadZone);
@@ -122,6 +124,7 @@ class GameStage implements ContactListener {
   int get cameraY => _camera._yView;
 
 // ------------------------------------------->
+// Render loop
 
   void _renderLoop(num dt) {
     _world.stepDt(1 / 60, 10, 10); //TODO dynamic values
@@ -142,12 +145,7 @@ class GameStage implements ContactListener {
   }
 
   void _updateCamera() {
-    PhysicsItem followed = _camera._followed;
-    if (followed != null && followed.body != null && !_paused) {
-      followed.position = new math.Point(
-          followed.body.worldCenter.x, followed.body.worldCenter.y);
-      followed.rotation = followed.body.getAngle();
-
+    if (_camera._followed != null && _camera._followed.body != null && !_paused) {
       _camera.update();
     }
   }

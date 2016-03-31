@@ -21,14 +21,14 @@ class MathHelper {
 
   static num radianToDegree(num radian) => radian * 180 / math.PI;
 
-  static num radianAngleBetweenMouseAndObject(
-      math.Point mouse, math.Point object) {
-    return (math.PI / 2) + math.atan2(mouse.y - object.y, mouse.x - object.x);
+  static num radianAngleBetween2Objects(
+      math.Point destination, math.Point origin) {
+    return (math.PI / 2) + math.atan2(destination.y - origin.y, destination.x - origin.x);
   }
 
-  static num degreeAngleBetweenMouseAndObject(
+  static num degreeAngleBetween2Objects(
       math.Point mouse, math.Point object) {
-    num angle = radianToDegree(radianAngleBetweenMouseAndObject(mouse, object));
+    num angle = radianToDegree(radianAngleBetween2Objects(mouse, object));
 
     if (angle < 0) {
       angle = 360 - (-angle);

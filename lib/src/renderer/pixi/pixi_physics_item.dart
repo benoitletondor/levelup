@@ -20,7 +20,7 @@ class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T>
     implements PhysicsItem {
   bool _paused = false;
 
-  PixiPhysicsItem(PIXI.DisplayObject displayObject) : super(displayObject) {
+  PixiPhysicsItem(T displayObject) : super(displayObject) {
     assert(displayObject is PhysicsItem);
   }
 

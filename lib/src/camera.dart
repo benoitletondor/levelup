@@ -78,8 +78,8 @@ class Camera {
    */
   update() {
     if (_followed != null) {
-      int posX = _followed.position.x.toInt();
-      int posY = _followed.position.y.toInt();
+      int posX = _followed.body.worldCenter.x.toInt();
+      int posY = _followed.body.worldCenter.y.toInt();
 
       if (_axis == CameraAxis.HORIZONTAL || _axis == CameraAxis.BOTH) {
         // moves camera on horizontal axis based on followed object position
