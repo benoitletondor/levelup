@@ -48,6 +48,21 @@ class GameStage implements ContactListener {
     RenderingManager.scheduleRenderingAction(_renderLoop);
   }
 
+  void destroy() {
+    RenderingManager.unscheduleRenderingAction(_renderLoop);
+    _paused = true;
+
+    stopDebug();
+    _world.setContactListener(null);
+    for (PhysicsItem item in _physicsObjects) {
+      _world.destroyBody(item.body);
+    }
+
+    if( _dragNDropManager != null ) {
+      _dragNDropManager._destroy();
+    }
+  }
+
   html.CanvasElement get view => _renderer.view;
 
   set gravity(Vector2 gravity) => _world.setGravity(gravity);

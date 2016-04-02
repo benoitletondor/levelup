@@ -37,6 +37,12 @@ class DragNDropManager {
     }
   }
 
+  void _destroy() {
+    RenderingManager.unscheduleRenderingAction(_renderLoop);
+    _draggedItems.clear();
+    _draggedItemsOffset.clear();
+  }
+
 // ---------------------------------------->
 
   void addDragNDropableItem(PhysicsItem item) {
