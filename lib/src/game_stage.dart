@@ -112,6 +112,21 @@ class GameStage implements ContactListener {
     _renderer.removeChild(displayObject);
   }
 
+  List<PhysicsItem> getItemsInZone(math.Rectangle zone) {
+    _QueryCallbackImpl queryCallback = new _QueryCallbackImpl();
+
+    Vector2 lowerVector =
+        new Vector2(zone.left.toDouble(), zone.bottom.toDouble());
+
+    Vector2 upperVector =
+        new Vector2(zone.left.toDouble(), zone.top.toDouble());
+
+    _world.queryAABB(
+        queryCallback, new AABB.withVec2(lowerVector, upperVector));
+
+    return queryCallback.foundItems;
+  }
+
 // ------------------------------------------->
 // Camera
 
@@ -145,7 +160,9 @@ class GameStage implements ContactListener {
   }
 
   void _updateCamera() {
-    if (_camera._followed != null && _camera._followed.body != null && !_paused) {
+    if (_camera._followed != null &&
+        _camera._followed.body != null &&
+        !_paused) {
       _camera.update();
     }
   }
