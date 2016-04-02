@@ -24,12 +24,16 @@ class PixiRenderer implements Renderer {
     assert(this._renderer != null);
   }
 
+  @override
   void addChild(PixiItem child) => _container.addChild(child._displayObject);
 
+  @override
   void removeChild(PixiItem child) =>
       _container.removeChild(child._displayObject);
 
+  @override
   html.CanvasElement get view => _renderer.view;
 
+  @override
   void render() => _renderer.render(_container);
 }

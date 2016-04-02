@@ -18,6 +18,7 @@ part of levelup;
 
 class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T>
     implements PhysicsItem {
+  @override
   bool _paused = false;
 
   PixiPhysicsItem(T displayObject) : super(displayObject) {
@@ -26,6 +27,7 @@ class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T>
 
   PhysicsItem get _physicsObject => (_displayObject as PhysicsItem);
 
+  @override
   Body get body {
     if (_paused) {
       // Return stub body while paused to avoid transforming it
@@ -35,6 +37,7 @@ class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T>
     return _physicsObject.body;
   }
 
+  @override
   set body(Body body) {
     if (_paused) {
       return;
@@ -43,10 +46,13 @@ class PixiPhysicsItem<T extends PIXI.DisplayObject> extends PixiItem<T>
     _physicsObject.body = body;
   }
 
+  @override
   FixtureDef buildFixtureDef() => _physicsObject.buildFixtureDef();
 
+  @override
   BodyDef get bodyDef => _physicsObject.bodyDef;
 
+  @override
   bool operator ==(other) {
     if (other is PIXI.DisplayObject) {
       return _displayObject == other;

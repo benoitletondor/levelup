@@ -23,15 +23,21 @@ class PixiItem<T extends PIXI.DisplayObject> implements Item<T> {
     assert(_displayObject != null);
   }
 
+  @override
   T get item => _displayObject;
 
+  @override
   set position(math.Point point) =>
       _displayObject.position = new PIXI.Point.fromValues(point.x, point.y);
+  @override
   math.Point get position => _displayObject.position;
 
+  @override
   num get rotation => _displayObject.rotation;
+  @override
   set rotation(num rotation) => _displayObject.rotation = rotation;
 
+  @override
   bool operator ==(other) {
     if (other is PIXI.DisplayObject) {
       return _displayObject == other;
