@@ -112,6 +112,9 @@ class GameStage implements ContactListener {
     _renderer.removeChild(displayObject);
   }
 
+// ------------------------------------------->
+// Box2D querying
+
   List<PhysicsItem> getItemsInZone(math.Rectangle zone) {
     _QueryCallbackImpl queryCallback = new _QueryCallbackImpl();
 
@@ -125,6 +128,16 @@ class GameStage implements ContactListener {
         queryCallback, new AABB.withVec2(lowerVector, upperVector));
 
     return queryCallback.foundItems;
+  }
+
+  Contact getContactBetweenItems(PhysicsItem item1, PhysicsItem item2) {
+    for (ContactEdge ce = item1.body.getContactList(); ce != null; ce = ce.next) {
+      if (ce.other.userData == item2) {
+        return ce.contact;
+      }
+    }
+
+    return null;
   }
 
 // ------------------------------------------->
