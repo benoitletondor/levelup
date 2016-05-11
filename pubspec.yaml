@@ -3,9 +3,8 @@ version: 0.0.1
 author: Benoit Letondor
 description: 2D Dart game framework
 dependencies:
-  box2d: 0.2.0
+  box2d: 0.3.0
   browser: any
-  vector_math: 1.4.3
   pixi2dart:
     version: any
     path: ../pixi2dart/
